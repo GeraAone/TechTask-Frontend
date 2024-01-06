@@ -1,29 +1,60 @@
 <div class="items">
-  <p-button (click) = "hideList()">
-    Click to hide list
+
+  <p-button (onClick)="showAdd()">
+    Add new item
   </p-button>
-  <p-table [value]="items" [tableStyle]="{ 'min-width': '50rem' }" styleClass="p-datatable-sm">
+  <div *ngIf="addForm" class="adding-form">
+    <form [formGroup]="itemForm" (ngSubmit)="addItem()">
+      <p-inputGroup>
+        <p-inputGroupAddon>n</p-inputGroupAddon>
+        <input formControlName="name" placeholder="Name" />
+      </p-inputGroup>
+      <p-inputGroup>
+        <p-inputGroupAddon>$</p-inputGroupAddon>
+        <input formControlName="itemSum" placeholder="Sum" />
+      </p-inputGroup>
+      <div class="actions">
+      <p-button type="submit" [disabled]="!itemForm.valid">Save</p-button>
+      <p-button (onClick)="showAdd()">Cancel</p-button>
+    </div>
+    </form>
+  </div>
+
+  <p>Items for Document № {{document.docNumber}}</p>
+  <p-button (click)="hideList()" class="hide-button">
+    {{ isVisible ? 'Click to hide' : 'Click to show' }}
+  </p-button>
+  <div *ngIf="isVisible && items.length === 0;">
+    <p>List is empty </p>
+  </div>
+  <p-table [value]="items" [tableStyle]="{ 'min-width': '100%' }" styleClass="p-datatable-sm"
+    *ngIf="isVisible && items.length > 0">
     <ng-template pTemplate="header">
       <tr>
         <th>Number</th>
-        <th>Date</th>
+        <th>Name</th>
         <th>Sum</th>
+        <th>Actions</th>
       </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-item>
-      <a routerLink="/documents/{{document.number}}}/items">Items</a>
-      <tr *ngIf="isVisible">
-        <td>{{item.number}}</td>
-        <td>{{item.name}}</td>
-        <td>{{item.sum}}</td>
-        <p-button (onClick)="editItem(item)" )> Edit</p-button>
-        <p-button (onClick)="deleteItem(item)"> Delete </p-button>
+
+    <ng-template pTemplate="body" let-item [class.selected]="item === selectedItem">
+      <tr (click)="onSelect(item)">
+        <td >{{ item.itemId}}</td>
+        <td *ngIf="!item.editing">{{ item.name}}</td>
+        <td *ngIf="item.editing">
+          <input [(ngModel)]="item.name" />
+        </td>
+        <td *ngIf="!item.editing">{{ item.itemSum}}</td>
+        <td *ngIf="item.editing">
+          <input [(ngModel)]="item.itemSum" type="number" />
+        </td>
+        <div class="actions">
+          <button pButton type="button" label=" {{ item.editing ? 'Cancel' : 'Edit' }} " class="p-button-secondary" (click)="editMode(item)"></button>
+          <button *ngIf="item.editing"  pButton type="button" label="Save" (click)="editItem(item)"></button>
+          <button pButton type="button" label="Delete" class="p-button-danger" (click)="deleteItem(item)"></button>
+        </div>
       </tr>
     </ng-template>
   </p-table>
 </div>
-<p-button (onClick)="addItem()">
-  Add
-  <!--<input [(ngModel)]="document.number" placeholder="number"/>-->
-</p-button>
-

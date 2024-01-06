@@ -1,8 +1,8 @@
-export class Document {
-  id: number;
-  number: string;
-  date: string;
-  sum: number;
-  notes: string;
-
+export class DocumentMaster {
+  docId?: number;
+  docNumber: number;
+  date?: string;
+  docSum?: number;
+  notes?: string;
+  editing?: boolean = false;
 }

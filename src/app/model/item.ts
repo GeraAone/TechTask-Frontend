@@ -1,7 +1,9 @@
-export class Item {
-  id: number;
-  number: string;
-  name: string;
-  sum: number;
+import { DocumentMaster } from "./document";
 
+export class Item {
+  itemId: number;
+  name: string;
+  itemSum: number;
+  document: DocumentMaster;
+  editing?: boolean = false;
 }

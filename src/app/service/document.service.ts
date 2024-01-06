@@ -1,38 +1,72 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {Document} from "../model/document";
+import { DocumentMaster} from "../model/document";
+import { Item } from '../model/item';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DocumentService {
 
-  private documentUrl = 'http://localhost:4200/documents'
-  constructor(private http: HttpClient) { }
-  getDocuments(): Observable<Document[]> {
-    return this.http.get<Document[]>(this.documentUrl);
+  private documentUrl = 'http://localhost:8080/documents'
+  constructor(private http: HttpClient) {
   }
-  getDocument(docNumber: String): Observable<Document>
+
+  getDocuments(): Observable<DocumentMaster[]> {
+    return this.http.get<DocumentMaster[]>(this.documentUrl);
+  }
+
+  getDocument(docNumber: String): Observable<DocumentMaster>
   {
     const url =`${this.documentUrl}/${docNumber}`;
-    return this.http.get<Document>(url);
-  }
-  create(newDocument: Document): Observable<Document>
-  {
-    const url = `${this.documentUrl}/${newDocument.number}`;
-    return this.http.post<Document>(url, newDocument);
+    return this.http.get<DocumentMaster>(url);
   }
 
-  update(updDocument: Document): Observable<Document>
+  create(newDocument: DocumentMaster): Observable<DocumentMaster>
   {
-    const url = `${this.documentUrl}/${updDocument.number}`;
-    return this.http.put<Document>(url, updDocument);
+    const url = `${this.documentUrl}`;
+    return this.http.post<DocumentMaster>(url, newDocument);
   }
 
-  delete(documentNumber: String): Observable<void>
+  update(updDocument: DocumentMaster): Observable<DocumentMaster>
+  {
+    const url = `${this.documentUrl}/${updDocument.docNumber}`;
+    return this.http.put<DocumentMaster>(url, updDocument);
+  }
+
+  delete(documentNumber: number): Observable<void>
   {
     const url = `${this.documentUrl}/${documentNumber}`;
+    return this.http.delete<void>(url);
+  }
+
+  getItemsByDoc(docNumber: number){
+    const url =`${this.documentUrl}/${docNumber}/items`;
+    return this.http.get<Item[]>(url);
+  }
+
+  getItems(){
+    const url =`${this.documentUrl}/items`;
+    return this.http.get<Item[]>(url);
+  }
+
+  createItem(newItem: Item): Observable<Item>
+  {
+    const url = `${this.documentUrl}/${newItem.document.docNumber}/items`;
+    return this.http.post<Item>(url, newItem);
+  }
+
+  updateItem(updItem: Item): Observable<Item>
+  {
+    const url = `${this.documentUrl}/${updItem.document.docNumber}/items/${updItem.itemId}`;
+    return this.http.put<Item>(url, updItem);
+  }
+
+
+  deleteItem(documentNumber: number, itemId: number): Observable<void>
+  {
+    const url = `${this.documentUrl}/${documentNumber}/items/${itemId}`;
     return this.http.delete<void>(url);
   }
 }

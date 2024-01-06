@@ -1,1 +1,70 @@
+/*
+/* Apply styles to the DOCUMENTS section */
+.docs {
+  margin-top: 50px;
+  max-width: 1600px;
 
+  display: flex;
+  flex-direction: column;
+  gap: 40px
+}
+
+input {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  width: calc(100% - 40px);
+}
+
+/* Style the table */
+.p-datatable-sm {
+  border-collapse: collapse;
+  width: 100%;
+}
+.add-form{
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.actions {
+  margin: 5px;
+  display: flex;
+  gap: 10px;
+  padding: 8px;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+tr {
+  cursor: pointer; /* Change cursor to pointer on hover */
+}
+
+/* Style for selected row */
+tr.selected {
+  background-color: #ffcccc; /* Red background for the selected row */
+}
+
+/* Style the Items section */
+h2 {
+  margin-top: 20px;
+  font-size: 24px;
+}
+
+.doc-selected{
+  display: flex;
+  flex-direction: column;
+}
+
+.doc-items-wrap {
+  display: block;
+  margin: 30px;
+}

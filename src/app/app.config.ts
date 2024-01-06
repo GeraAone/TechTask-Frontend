@@ -5,5 +5,5 @@ import { routes } from './app.routes';
 import {DocumentService} from "./service/document.service";
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideRouter(routes), DocumentService, ActivatedRoute]
+  providers: [provideRouter(routes), DocumentService]
 };

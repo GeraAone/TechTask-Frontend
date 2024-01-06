@@ -1,55 +1,71 @@
 <h1>DOCUMENTS</h1>
 <div class="docs">
   <p-button (onClick)="showAdd()">
-    Add
+    Add new document
   </p-button>
-  <div *ngIf="addForm">
-    <p-inputGroup>
-      <p-inputGroupAddon>№</p-inputGroupAddon>
-      <input [(ngModel)]="addDocument.number" placeholder="Number"/>
-    </p-inputGroup>
-    <p-inputGroup>
-      <p-inputGroupAddon>$</p-inputGroupAddon>
-      <input [(ngModel)]="addDocument.sum" placeholder="Sum"/>
-      <p-inputGroupAddon>.00</p-inputGroupAddon>
-    </p-inputGroup>
-    <p-inputGroup>
-      <p-inputGroupAddon>Y</p-inputGroupAddon>
-      <input [(ngModel)]="addDocument.date" placeholder="Date"/>
-    </p-inputGroup>
-    <p-inputGroup>
-      <p-inputGroupAddon>n</p-inputGroupAddon>
-      <input [(ngModel)]="addDocument.notes" placeholder="Notes"/>
-    </p-inputGroup>
-    <p-button (onClick)="addDoc()"></p-button>
+  <div *ngIf="addForm" class="add-form">
+    <form [formGroup]="documentForm" (ngSubmit)="addDoc()">
+      <p-inputGroup>
+        <p-inputGroupAddon>№</p-inputGroupAddon>
+        <input formControlName="docNumber" placeholder="Number"/>
+      </p-inputGroup>
+      <p-inputGroup>
+        <p-inputGroupAddon>Y</p-inputGroupAddon>
+        <input formControlName="date" placeholder="Date"/>
+      </p-inputGroup>
+      <p-inputGroup>
+        <p-inputGroupAddon>n</p-inputGroupAddon>
+        <input formControlName="notes" placeholder="Notes"/>
+      </p-inputGroup>
+      <p *ngIf="isValidateError" style="color: red;">An document with the same number already exists</p>
+      <div class="actions">
+      <p-button type="submit" [disabled]="!documentForm.valid">Save</p-button>
+      <p-button  (onClick)="showAdd()">Cancel</p-button>
+    </div>
+    </form>
   </div>
-  <p-table [value]="documents" [tableStyle]="{ 'min-width': '50rem' }" styleClass="p-datatable-sm">
+  <p-table *ngIf="documents.length !== 0" [value]="documents" [tableStyle]="{ 'min-width': '50rem' }" styleClass="p-datatable-sm">
     <ng-template pTemplate="header">
       <tr>
         <th>Number</th>
         <th>Date</th>
         <th>Sum</th>
         <th>Notes</th>
+        <th>Actions</th>
       </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-document
-                 [class.selected]="document === selectedDocument">
+
+    <ng-template pTemplate="body" let-document [class.selected]="document === selectedDocument">
       <tr (click)="onSelect(document)">
-        <td>{{document.number}}</td>
-        <td>{{document.date}}</td>
-        <td>{{document.sum}}</td>
-        <td>{{document.notes}}</td>
-          <p-button (onClick)="editDoc(document)" )> Edit</p-button>
-          <p-button (onClick)="deleteDoc(document)"> Delete </p-button>
-            <div *ngIf="document==selectedDocument">
-            <h2>
-              {{selectedDocument.number | uppercase}}:
-            </h2>
-            <button (click)="goToItems()">Show Items</button>
-            </div>
+        <td >{{ document.docNumber }}</td>
+        <td *ngIf="!document.editing">{{ document.date }}</td>
+        <td *ngIf="document.editing">
+          <input [(ngModel)]="document.date" />
+        </td>
+        <td >{{ document.docSum }}</td>
+        <td *ngIf="!document.editing">{{ document.notes }}</td>
+        <td *ngIf="document.editing">
+          <input [(ngModel)]="document.notes" />
+        </td>
+        <td>
+          <div class="actions">
+            <button pButton type="button" label=" {{ document.editing ? 'Cancel' : 'Edit' }} " class="p-button-secondary" (click)="editMode(document)"></button>
+            <button *ngIf="document.editing"  pButton type="button" label="Save" (click)="editDoc(document)"></button>
+            <button pButton type="button" label="Delete" class="p-button-danger" (click)="deleteDoc(document)"></button>
+          </div>
+        </td>
       </tr>
     </ng-template>
   </p-table>
+  <ng-container *ngIf="selectedDocument">
+    <div *ngFor="let document of documents">
+      <div *ngIf="document == selectedDocument" class="doc-items-wrap">
+        <div class="doc-items">
+          <h2>Items</h2>
+          <app-document-item [document]="selectedDocument"></app-document-item>
+        </div>
+      </div>
+    </div>
+  </ng-container>
 </div>
-<h2>Items</h2>
-<app-document-item [document]="selectedDocument"></app-document-item>
+

@@ -1,0 +1,49 @@
+
+.items {
+  border: 1px solid #ccc;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 30px;
+}
+
+.adding-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  border-radius: 5px;
+}
+
+
+
+.hide-button {
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.p-datatable-sm {
+  margin-top: 20px;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+
+.p-datatable-sm th {
+  background-color: #f2f2f2;
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+
+.p-datatable-sm td {
+  border: 1px solid #ccc;
+  padding: 8px;
+}
+
+.actions {
+  margin: 5px;
+  display: flex;
+  gap: 10px;
+  padding: 8px;
+}
